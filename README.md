@@ -1,8 +1,8 @@
 # vk-utils
 
-[![GitHub license](https://img.shields.io/badge/license-BSD-green.svg)](https://raw.githubusercontent.com/labile/vk-utils/master/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-BSD-green.svg)](https://github.com/labi-le/vk-utils/blob/main/LICENSE)
 [![Packagist Version](https://img.shields.io/packagist/v/labile/vk-utils.svg)](https://packagist.org/packages/labile/vk-utils)
-[![Packagist Stats](https://poser.pugx.org/labile/vk-utils/downloads)](https://packagist.org/packages/atehnix/vk-utils/stats)
+[![Packagist Stats](https://poser.pugx.org/labile/vk-utils/downloads)](https://packagist.org/packages/labile/vk-utils/stats)
 
 [Документация на русском языке](https://github.com/labi-le/vk-utils/blob/main/README_RU.md)
 
