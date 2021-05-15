@@ -322,6 +322,7 @@ class Uploader extends Client implements IFileUploader
                 return $this->callableVideo()($CompatibilityInstances);
             }
 
+            return self::createException(20, "Callback function error, no compatibility instance found ");
         };
 
         return self::isParallelUpload()
