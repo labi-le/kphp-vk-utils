@@ -1,0 +1,110 @@
+<?php
+
+declare(strict_types=1);
+
+
+namespace Astaroth\VkUtils\Uploading;
+
+
+use Astaroth\VkUtils\Contracts\IDocsUpload;
+
+abstract class DocCompatibility implements IDocsUpload
+{
+    private string $path;
+    private ?string $title = null;
+    private ?string $tags = null;
+    private bool $return_tags = false;
+
+    public string $file_type;
+
+    private ?int $peer_id = null;
+    private string $file;
+
+    public function __construct(string $path)
+    {
+        $this->path = $path;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setTitle(?string $title): static
+    {
+        $this->title = $title;
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setTags(?string $tags): static
+    {
+        $this->tags = $tags;
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setReturnTags(bool $return_tags): static
+    {
+        $this->return_tags = $return_tags;
+        return $this;
+    }
+
+    public function getFile(): string
+    {
+        return $this->file;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function getTags(): ?string
+    {
+        return $this->tags;
+    }
+
+    public function isReturnTags(): bool
+    {
+        return $this->return_tags;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setPeerId(?int $peer_id): static
+    {
+        $this->peer_id = $peer_id;
+        return $this;
+    }
+
+    public function getPeerId(): ?int
+    {
+        return $this->peer_id;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setFile(string $file): static
+    {
+        $this->file = $file;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPath(): string
+    {
+        return $this->path;
+    }
+
+    public function getFileType(): string
+    {
+        return $this->file_type;
+    }
+}

@@ -1,0 +1,39 @@
+{
+  "name": "labile/vk-utils",
+  "description": "PHP Utils for vk.com API",
+  "keywords": [
+    "php",
+    "vk-utils",
+    "vk-utilites",
+    "api",
+    "vk",
+    "vk.com",
+    "client",
+    "vkontakte"
+  ],
+  "license": "BSD-3-Clause",
+  "type": "library",
+  "authors": [
+    {
+      "name": "labile",
+      "email": "1a6i1e@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=8.0",
+    "guzzlehttp/guzzle": "^7.3",
+    "ext-fileinfo": "*",
+    "amphp/parallel-functions": "^1.0"
+  },
+  "require-dev": {
+    "vimeo/psalm": "^4.7"
+  },
+  "autoload": {
+    "psr-4": {
+      "Astaroth\\VkUtils\\": "src"
+    },
+    "files": [
+      "src/functions.php"
+    ]
+  }
+}
