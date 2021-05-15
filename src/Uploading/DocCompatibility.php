@@ -10,15 +10,15 @@ use Astaroth\VkUtils\Contracts\IDocsUpload;
 
 abstract class DocCompatibility implements IDocsUpload
 {
-    private string $path;
-    private ?string $title = null;
-    private ?string $tags = null;
-    private bool $return_tags = false;
+    protected string $path;
+    protected ?string $title = null;
+    protected ?string $tags = null;
+    protected bool $return_tags = false;
 
-    public string $file_type;
+    protected string $file_type;
 
-    private ?int $peer_id = null;
-    private string $file;
+    protected ?int $peer_id = null;
+    protected string $file;
 
     public function __construct(string $path)
     {

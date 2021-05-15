@@ -8,5 +8,5 @@ namespace Astaroth\VkUtils\Uploading;
 
 final class AudioMessage extends DocCompatibility
 {
-    public string $file_type = 'audio_message';
+    protected string $file_type = 'audio_message';
 }

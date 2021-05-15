@@ -8,6 +8,5 @@ namespace Astaroth\VkUtils\Uploading;
 
 final class Graffiti extends DocCompatibility
 {
-    public string $file_type = 'graffiti';
-
+    protected string $file_type = 'graffiti';
 }

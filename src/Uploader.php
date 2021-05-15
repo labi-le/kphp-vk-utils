@@ -13,6 +13,7 @@ use Astaroth\VkUtils\Requests\ExecuteRequest;
 use Astaroth\VkUtils\Requests\Request;
 use Astaroth\VkUtils\Traits\ParallelProcessingTrait;
 use Astaroth\VkUtils\Uploading\Doc;
+use Astaroth\VkUtils\Uploading\DocCompatibility;
 use Astaroth\VkUtils\Uploading\Photo;
 use Astaroth\VkUtils\Uploading\Video;
 use Closure;
@@ -172,7 +173,7 @@ class Uploader extends Client implements IFileUploader
      * @return string
      * @throws Throwable
      */
-    private function docsSave(Doc $docs): string
+    private function docsSave(DocCompatibility $docs): string
     {
         $data = $this->request('docs.save',
             [
@@ -228,7 +229,7 @@ class Uploader extends Client implements IFileUploader
 
     private function callableDocCompatibility(): Closure
     {
-        return function (Doc $DocInstances) {
+        return function (DocCompatibility $DocInstances) {
             $data = $this->getMessagesUploadServer($DocInstances->getPeerId(), $DocInstances->getFileType());
             $response = $this->uploadFile
             (
@@ -305,11 +306,11 @@ class Uploader extends Client implements IFileUploader
     /**
      * @throws Throwable
      */
-    private function saver(IDocsUpload|Doc|IPhoto|Photo|IVideo|Video ...$CompatibilityInstances): array
+    private function saver(DocCompatibility|Photo|Video ...$CompatibilityInstances): array
     {
         $callable = function ($CompatibilityInstances) {
 
-            if ($CompatibilityInstances instanceof Doc) {
+            if ($CompatibilityInstances instanceof DocCompatibility) {
                 return $this->callableDocCompatibility()($CompatibilityInstances);
             }
 

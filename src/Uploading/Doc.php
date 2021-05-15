@@ -12,5 +12,5 @@ namespace Astaroth\VkUtils\Uploading;
  */
 final class Doc extends DocCompatibility
 {
-    public string $file_type = 'doc';
+    protected string $file_type = 'doc';
 }
