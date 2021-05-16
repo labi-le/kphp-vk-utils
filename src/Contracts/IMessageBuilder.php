@@ -5,6 +5,8 @@ declare(strict_types=1);
 
 namespace Astaroth\VkUtils\Contracts;
 
+use Astaroth\VkUtils\Builders\MessageBuilder;
+
 /**
  * Sends a message
  * https://vk.com/dev/messages.send
@@ -20,9 +22,9 @@ interface IMessageBuilder
     /**
      * User ID
      * @param int ...$user_ids
-     * @return $this
+     * @return MessageBuilder
      */
-    public function setUserId(int ...$user_ids): static;
+    public function setUserId(int ...$user_ids): MessageBuilder;
 
     /**
      * Destination ID.
@@ -37,44 +39,44 @@ interface IMessageBuilder
      * - community ID, e.g. -12345.
      *
      * @param int ...$peer_ids
-     * @return $this
+     * @return MessageBuilder
      */
-    public function setPeerId(int ...$peer_ids): static;
+    public function setPeerId(int ...$peer_ids): MessageBuilder;
 
     /**
      * User's short address (for example, labile.paranoid)
      * @param string $domain
-     * @return $this
+     * @return MessageBuilder
      */
-    public function setDomain(string $domain): static;
+    public function setDomain(string $domain): MessageBuilder;
 
     /**
      * ID of conversation the message will relate to
      * @param int $chat_id
-     * @return $this
+     * @return MessageBuilder
      */
-    public function setChatId(int $chat_id): static;
+    public function setChatId(int $chat_id): MessageBuilder;
 
     /**
      * (Required if attachments is not set.) Text of the message
      * @param string $message
-     * @return $this
+     * @return MessageBuilder
      */
-    public function setMessage(string $message): static;
+    public function setMessage(string $message): MessageBuilder;
 
     /**
      * Geographical latitude of a check-in, in degrees (from -90 to 90)
      * @param float $lat
-     * @return $this
+     * @return MessageBuilder
      */
-    public function setLat(float $lat): static;
+    public function setLat(float $lat): MessageBuilder;
 
     /**
      * Geographical longitude of a check-in, in degrees (from -180 to 180)
      * @param float $long
-     * @return $this
+     * @return MessageBuilder
      */
-    public function setLong(float $long): static;
+    public function setLong(float $long): MessageBuilder;
 
     /**
      * NO MORE THAN 10 ATTACHMENTS
@@ -97,16 +99,16 @@ interface IMessageBuilder
      * photo100172_166443618
      *
      * @param string ...$attachments
-     * @return $this
+     * @return MessageBuilder
      */
-    public function setAttachment(string ...$attachments): static;
+    public function setAttachment(string ...$attachments): MessageBuilder;
 
     /**
      * Id of replied message
      * @param int $reply_to
-     * @return $this
+     * @return MessageBuilder
      */
-    public function setReplyTo(int $reply_to): static;
+    public function setReplyTo(int $reply_to): MessageBuilder;
 
     /**
      * ID of forwarded messages, separated with a comma. Listed messages of the sender will be shown in the message body at the recipient's
@@ -117,46 +119,46 @@ interface IMessageBuilder
      * list of comma-separated numbers, the maximum number of elements allowed is 1000
      *
      * @param int ...$forward_messages
-     * @return $this
+     * @return MessageBuilder
      */
-    public function setForwardMessages(int ...$forward_messages): static;
+    public function setForwardMessages(int ...$forward_messages): MessageBuilder;
 
     /**
      * Sticker id
      * @param int $sticker_id
-     * @return $this
+     * @return MessageBuilder
      */
-    public function setStickerId(int $sticker_id): static;
+    public function setStickerId(int $sticker_id): MessageBuilder;
 
     /**
      * Keyboard object
      * https://vk.com/dev/bots_docs_3
      * @param string $keyboard
-     * @return $this
+     * @return MessageBuilder
      */
-    public function setKeyboard(string $keyboard): static;
+    public function setKeyboard(string $keyboard): MessageBuilder;
 
     /**
      * Payload of message
      * maximum length 1000
      * @param string $payload
-     * @return $this
+     * @return MessageBuilder
      */
-    public function setPayload(string $payload): static;
+    public function setPayload(string $payload): MessageBuilder;
 
     /**
      * Links will not attach snippet
      * @param bool $dont_parse_links
-     * @return $this
+     * @return MessageBuilder
      */
-    public function setDontParseLinks(bool $dont_parse_links): static;
+    public function setDontParseLinks(bool $dont_parse_links): MessageBuilder;
 
     /**
      * Mention of user will not generate notification for him
      * @param bool $disable_mentions
-     * @return $this
+     * @return MessageBuilder
      */
-    public function setDisableMentions(bool $disable_mentions): static;
+    public function setDisableMentions(bool $disable_mentions): MessageBuilder;
 
 
 }

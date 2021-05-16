@@ -24,6 +24,8 @@ class Client implements ClientContract
     public const API_VERSION = '5.130';
     public const API_TIMEOUT = 15.0;
 
+    public const RUNTIME_EXCEPTION = 20;
+
     /**
      * @var HttpClient
      */
@@ -222,6 +224,7 @@ class Client implements ClientContract
          */
         return new $exception($message, $code);
     }
+
 
     /**
      * @param callable $callable

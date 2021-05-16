@@ -36,7 +36,7 @@ class Uploader extends Client implements IFileUploader
     private function openWebFile(string $direct_link): mixed
     {
 
-        return fopen(tmpfile_ext($direct_link), 'rb') ?: $this->createException(20, 'Failed to load file');
+        return fopen(tmpfile_ext($direct_link), 'rb') ?: $this->createException(self::RUNTIME_EXCEPTION, 'Failed to load file');
     }
 
     /**
@@ -47,7 +47,7 @@ class Uploader extends Client implements IFileUploader
      */
     private function openLocalFile(string $path): mixed
     {
-        return file_exists($path) ? fopen($path, 'rb') : $this->createException(20, 'File does not exist');
+        return file_exists($path) ? fopen($path, 'rb') : $this->createException(self::RUNTIME_EXCEPTION, 'File does not exist');
     }
 
     /**
@@ -84,29 +84,6 @@ class Uploader extends Client implements IFileUploader
             return $this->request('photos.getMessagesUploadServer', ['group_id' => $id]);
         }
 
-        return null;
-    }
-
-    /**
-     * @future
-     * @param string $selector
-     * @param array $ids
-     * @return ?ExecuteRequest
-     * @throws Throwable
-     */
-    private function getMessagesUploadServerExecute(string $selector, array $ids): ?ExecuteRequest
-    {
-        if ($selector === 'doc' || $selector === 'audio_message' || $selector === 'graffiti') {
-            return ExecuteRequest::make(array_map(static function ($id) use ($selector) {
-                return new Request('docs.getMessagesUploadServer', ['type' => $selector, 'peer_id' => $id]);
-            }, $ids));
-        }
-
-        if ($selector === 'photo') {
-            return ExecuteRequest::make(array_map(static function ($id) {
-                return new Request('photos.getMessagesUploadServer', ['group_id' => $id]);
-            }, $ids));
-        }
         return null;
     }
 
@@ -258,71 +235,25 @@ class Uploader extends Client implements IFileUploader
         };
     }
 
-    /**
-     * @param IVideo ...$VideoInstances
-     * @return array
-     * @throws Throwable
-     */
-    public function uploadVideo(IVideo ...$VideoInstances): array
-    {
-        return $this->saver(...$VideoInstances);
-    }
 
     /**
      * @throws Throwable
      */
-    public function uploadAudioMessage(IDocsUpload ...$AudioInstances): array
-    {
-        return $this->uploadDoc(...$AudioInstances);
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function uploadGraffiti(IDocsUpload ...$GraffitiInstances): array
-    {
-        return $this->uploadDoc(...$GraffitiInstances);
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function uploadDoc(IDocsUpload ...$DocInstances): array
-    {
-        return $this->saver(...$DocInstances);
-    }
-
-
-    /**
-     * @param IPhoto ...$PhotoInstances
-     * @return array
-     * @throws Throwable
-     */
-    public function uploadPhoto(IPhoto ...$PhotoInstances): array
-    {
-        return $this->saver(...$PhotoInstances);
-    }
-
-    /**
-     * @throws Throwable
-     */
-    private function saver(DocCompatibility|Photo|Video ...$CompatibilityInstances): array
+    private function saver(IDocsUpload|Photo|Video ...$CompatibilityInstances): array
     {
         $callable = function ($CompatibilityInstances) {
 
             if ($CompatibilityInstances instanceof DocCompatibility) {
                 return $this->callableDocCompatibility()($CompatibilityInstances);
             }
-
             if ($CompatibilityInstances instanceof Photo) {
                 return $this->callablePhoto()($CompatibilityInstances);
             }
-
             if ($CompatibilityInstances instanceof Video) {
                 return $this->callableVideo()($CompatibilityInstances);
             }
 
-            return self::createException(20, "Callback function error, no compatibility instance found ");
+            return self::createException(self::RUNTIME_EXCEPTION, "Callback function error, no compatibility instance found ");
         };
 
         return self::isParallelUpload()

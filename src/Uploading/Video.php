@@ -57,7 +57,7 @@ final class Video implements IAttachmentUpload, IVideo
     /**
      * @inheritDoc
      */
-    public function setName(string $name): static
+    public function setName(string $name): Video
     {
         $this->name = $name;
         return $this;
@@ -66,7 +66,7 @@ final class Video implements IAttachmentUpload, IVideo
     /**
      * @inheritDoc
      */
-    public function setDescription(string $description): static
+    public function setDescription(string $description): Video
     {
         $this->description = $description;
         return $this;
@@ -75,7 +75,7 @@ final class Video implements IAttachmentUpload, IVideo
     /**
      * @inheritDoc
      */
-    public function setIsPrivate(bool $is_private): static
+    public function setIsPrivate(bool $is_private): Video
     {
         $this->is_private = $is_private;
         return $this;
@@ -84,7 +84,7 @@ final class Video implements IAttachmentUpload, IVideo
     /**
      * @inheritDoc
      */
-    public function setWallpost(bool $wallpost): static
+    public function setWallpost(bool $wallpost): Video
     {
         $this->wallpost = $wallpost;
         return $this;
@@ -93,7 +93,7 @@ final class Video implements IAttachmentUpload, IVideo
     /**
      * @inheritDoc
      */
-    public function setLink(string $link): static
+    public function setLink(string $link): Video
     {
         $this->link = $link;
         return $this;
@@ -102,7 +102,7 @@ final class Video implements IAttachmentUpload, IVideo
     /**
      * @inheritDoc
      */
-    public function setGroupId(int $group_id): static
+    public function setGroupId(int $group_id): Video
     {
         $this->group_id = $group_id;
         return $this;
@@ -111,7 +111,7 @@ final class Video implements IAttachmentUpload, IVideo
     /**
      * @inheritDoc
      */
-    public function setAlbumId(int $album_id): static
+    public function setAlbumId(int $album_id): Video
     {
         $this->album_id = $album_id;
         return $this;
@@ -120,7 +120,7 @@ final class Video implements IAttachmentUpload, IVideo
     /**
      * @inheritDoc
      */
-    public function setPrivacyView(string $privacy_view): static
+    public function setPrivacyView(string $privacy_view): Video
     {
         $this->privacy_view = $privacy_view;
         return $this;
@@ -129,7 +129,7 @@ final class Video implements IAttachmentUpload, IVideo
     /**
      * @inheritDoc
      */
-    public function setPrivacyComment(string $privacy_comment): static
+    public function setPrivacyComment(string $privacy_comment): Video
     {
         $this->privacy_comment = $privacy_comment;
         return $this;
@@ -138,7 +138,7 @@ final class Video implements IAttachmentUpload, IVideo
     /**
      * @inheritDoc
      */
-    public function setNoComments(bool $no_comments): static
+    public function setNoComments(bool $no_comments): Video
     {
         $this->no_comments = $no_comments;
         return $this;
@@ -147,7 +147,7 @@ final class Video implements IAttachmentUpload, IVideo
     /**
      * @inheritDoc
      */
-    public function setRepeat(bool $repeat): static
+    public function setRepeat(bool $repeat): Video
     {
         $this->repeat = $repeat;
         return $this;
@@ -156,7 +156,7 @@ final class Video implements IAttachmentUpload, IVideo
     /**
      * @inheritDoc
      */
-    public function setCompression(bool $compression): static
+    public function setCompression(bool $compression): Video
     {
         $this->compression = $compression;
         return $this;

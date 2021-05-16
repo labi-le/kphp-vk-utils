@@ -5,8 +5,7 @@ namespace Astaroth\VkUtils\Exceptions;
 
 /**
  * Class AccessDeniedVkException
- *
- * @package ATehnix\VkClient
+ * @package Astaroth\VkUtils\Exceptions
  */
 class AccessDeniedVkException extends VkException
 {

@@ -122,21 +122,22 @@ $attachments = $uploader->upload
 
 ```php
 
-use Astaroth\VkUtils\Messages;
+use Astaroth\VkUtils\Builders;
 use Astaroth\VkUtils\Uploader;
 use Astaroth\VkUtils\Uploading\Photo;
+use Astaroth\VkUtils\Message;
 
 $token = 'PUT TOKEN';
 
 $uploader = new Uploader();
-$message = new Messages();
+$message = new Message();
 
 $uploader->setDefaultToken($token);
 $message->setDefaultToken($token);
 
 
 $message = $message->create(
-    (new Messages\MessageBuilder())
+    (new Builders\MessageBuilder())
         ->setUserId(418618)
         ->setMessage('10 Dogs')
         ->setAttachment
@@ -152,11 +153,11 @@ $message = $message->create(
             new Photo('https://images.dog.ceo/breeds/pointer-germanlonghair/hans3.jpg'),
         )
         ),
-    (new Messages\MessageBuilder())
+    (new Builders\MessageBuilder())
         ->setUserId(418618)
         ->setMessage('2 sms'),
 
-    (new Messages\MessageBuilder())
+    (new Builders\MessageBuilder())
         ->setUserId(418618)
         ->setMessage('3 sms'),
 );
@@ -168,8 +169,9 @@ Turn on parallel requests to VK
 
 ```php
 
-use Astaroth\VkUtils\Messages;
+use Astaroth\VkUtils\Builders;
 use Astaroth\VkUtils\Uploader;
+use Astaroth\VkUtils\Message;
 use Astaroth\VkUtils\Uploading\Photo;
 use Astaroth\VkUtils\Uploading\Video;
 
@@ -178,15 +180,15 @@ $token = 'PUT TOKEN';
 $uploader = new Uploader();
 $uploader->setDefaultToken($token);
 
-$message = new Messages();
+$message = new Message();
 $message->setDefaultToken($token);
 
 Uploader::enableParallelRequest();
-Messages::enableParallelRequest();
+Message::enableParallelRequest();
 
 //Messages will be sent in parallel!
 $message = $message->create(
-    (new Messages\MessageBuilder())
+    (new Builders\MessageBuilder())
         ->setUserId(418618)
         ->setMessage('10 Dogs')
         ->setAttachment
@@ -205,7 +207,7 @@ $message = $message->create(
         )
         ),
 
-    (new Messages\MessageBuilder())
+    (new Builders\MessageBuilder())
         ->setUserId(418618)
         ->setMessage('who was Zarathustra? ')
 );
