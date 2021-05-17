@@ -9,8 +9,6 @@ use Astaroth\VkUtils\Contracts\IDocsUpload;
 use Astaroth\VkUtils\Contracts\IFileUploader;
 use Astaroth\VkUtils\Contracts\IPhoto;
 use Astaroth\VkUtils\Contracts\IVideo;
-use Astaroth\VkUtils\Requests\ExecuteRequest;
-use Astaroth\VkUtils\Requests\Request;
 use Astaroth\VkUtils\Traits\ParallelProcessingTrait;
 use Astaroth\VkUtils\Uploading\Doc;
 use Astaroth\VkUtils\Uploading\DocCompatibility;
@@ -177,7 +175,7 @@ class Uploader extends Client implements IFileUploader
      */
     private function uploadFile(string $upload_url, string $file, string $type): array
     {
-        return $this->getResponseData($this->http->post($upload_url, $this->multipartGenerator($type, $file)));
+        return $this->requestWithoutBaseUri($upload_url, $this->multipartGenerator($type, $file));
     }
 
     private function callableVideo(): Closure
