@@ -133,12 +133,13 @@ class Client implements ClientContract
     /**
      * @param string $uri
      * @param array $parameters
+     * @param string $type
      * @return array
      * @throws Throwable
      */
-    protected function requestWithoutBaseUri(string $uri, array $parameters = []): array
+    protected function requestWithoutBaseUri(string $uri, array $parameters = [], string $type = 'post'): array
     {
-        return $this->getResponseData($this->http->post($uri, $parameters));
+        return $this->getResponseData($this->http->$type($uri, $parameters));
     }
 
     /**
