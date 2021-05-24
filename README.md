@@ -183,8 +183,8 @@ $uploader->setDefaultToken($token);
 $message = new Message();
 $message->setDefaultToken($token);
 
-Uploader::enableParallelRequest();
-Message::enableParallelRequest();
+$uploader->setNumberOfParallelRequests(3);
+$message->setNumberOfParallelRequests(2);
 
 //Messages will be sent in parallel!
 $message = $message->create(
@@ -214,6 +214,6 @@ $message = $message->create(
 ```
 
 You need to be careful with parallel requests, this is how you can get `flood control` from VKontakte\
-It is recommended to use `Uploader::enableParallelRequest()` only with the community token\
-It is also worth noting that when using `Message::enableParallelRequest()` messages are sent in a random
+It is recommended to use `Uploader::setNumberOfParallelRequests()` only with the community token\
+It is also worth noting that when using `Message::setNumberOfParallelRequests()` messages are sent in a random
 this can be useful when sending multiple messages with attachments

@@ -5,16 +5,17 @@ declare(strict_types=1);
 
 namespace Astaroth\VkUtils\Uploading;
 
-use Astaroth\VkUtils\Contracts\IAttachmentUpload;
 use Astaroth\VkUtils\Contracts\IVideo;
+use Astaroth\VkUtils\Traits\AttachmentsUploadTrait;
 
 /**
  * Class Video
  * @package Astaroth\VkUtils\Uploading
  */
-final class Video implements IAttachmentUpload, IVideo
+final class Video implements IVideo
 {
-    private string $path;
+    use AttachmentsUploadTrait;
+
     private ?string $name = null;
     private ?string $description = null;
 
@@ -40,19 +41,6 @@ final class Video implements IAttachmentUpload, IVideo
     private bool $no_comments = false;
     private bool $repeat = false;
     private bool $compression = false;
-
-    public function __construct(string $path)
-    {
-        $this->path = $path;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getPath(): string
-    {
-        return $this->path;
-    }
 
     /**
      * @inheritDoc

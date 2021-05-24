@@ -25,7 +25,7 @@ final class Post extends Builder
             return $this->request('wall.post', get_object_vars($post));
         };
 
-        return self::isParallelUpload()
+        return $this->isEnabledParallelRequests()
             ? $this->parallelRequest($callable, $post)
             : $this->nonParallelRequest($callable, $post);
     }

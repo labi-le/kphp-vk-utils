@@ -7,10 +7,12 @@ namespace Astaroth\VkUtils\Uploading;
 
 
 use Astaroth\VkUtils\Contracts\IDocsUpload;
+use Astaroth\VkUtils\Traits\AttachmentsUploadTrait;
 
-abstract class DocCompatibility implements IDocsUpload
+abstract class AbstractDoc implements IDocsUpload
 {
-    protected string $path;
+    use AttachmentsUploadTrait;
+
     protected ?string $title = null;
     protected ?string $tags = null;
     protected bool $return_tags = false;
@@ -20,15 +22,10 @@ abstract class DocCompatibility implements IDocsUpload
     protected ?int $peer_id = null;
     protected string $file;
 
-    public function __construct(string $path)
-    {
-        $this->path = $path;
-    }
-
     /**
      * @inheritDoc
      */
-    public function setTitle(?string $title): static
+    public function setTitle(string $title): static
     {
         $this->title = $title;
         return $this;
@@ -37,7 +34,7 @@ abstract class DocCompatibility implements IDocsUpload
     /**
      * @inheritDoc
      */
-    public function setTags(?string $tags): static
+    public function setTags(string $tags): static
     {
         $this->tags = $tags;
         return $this;
@@ -75,7 +72,7 @@ abstract class DocCompatibility implements IDocsUpload
     /**
      * @inheritDoc
      */
-    public function setPeerId(?int $peer_id): static
+    public function setPeerId(int $peer_id): static
     {
         $this->peer_id = $peer_id;
         return $this;
@@ -93,14 +90,6 @@ abstract class DocCompatibility implements IDocsUpload
     {
         $this->file = $file;
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPath(): string
-    {
-        return $this->path;
     }
 
     public function getFileType(): string

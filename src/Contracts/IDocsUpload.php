@@ -6,19 +6,19 @@ declare(strict_types=1);
 namespace Astaroth\VkUtils\Contracts;
 
 
-interface IDocsUpload extends IAttachmentUpload
+interface IDocsUpload
 {
     /**
-     * @param string|null $title
+     * @param string $title
      * @return static
      */
-    public function setTitle(?string $title): static;
+    public function setTitle(string $title): static;
 
     /**
-     * @param string|null $tags
+     * @param string $tags
      * @return static
      */
-    public function setTags(?string $tags): static;
+    public function setTags(string $tags): static;
 
     /**
      * @param bool $return_tags
@@ -33,9 +33,9 @@ interface IDocsUpload extends IAttachmentUpload
     public function setFile(string $file): static;
 
     /**
-     * @param int|null $peer_id
+     * @param int $peer_id
      * @return static
      */
-    public function setPeerId(?int $peer_id): static;
+    public function setPeerId(int $peer_id): static;
 
 }

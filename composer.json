@@ -23,7 +23,7 @@
     "php": ">=8.0",
     "guzzlehttp/guzzle": "^7.3",
     "ext-fileinfo": "*",
-    "amphp/parallel-functions": "^1.0"
+    "spatie/fork": "^1.1"
   },
   "require-dev": {
     "vimeo/psalm": "^4.7",

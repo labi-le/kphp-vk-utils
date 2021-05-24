@@ -6,20 +6,17 @@ declare(strict_types=1);
 namespace Astaroth\VkUtils\Uploading;
 
 
-use Astaroth\VkUtils\Contracts\IAttachmentUpload;
 use Astaroth\VkUtils\Contracts\IPhoto;
+use Astaroth\VkUtils\Traits\AttachmentsUploadTrait;
 
-final class Photo implements IAttachmentUpload, IPhoto
+final class Photo implements IPhoto
 {
-    private string $path;
+    use AttachmentsUploadTrait;
+
     private ?int $group_id = null;
 
     private string $file_type = 'photo';
 
-    public function __construct(string $path)
-    {
-        $this->path = $path;
-    }
 
     /**
      * @return int|null
@@ -33,18 +30,10 @@ final class Photo implements IAttachmentUpload, IPhoto
      * @param int $group_id
      * @return static
      */
-    public function setGroupId(int $group_id): static
+    public function setGroupId(int $group_id): Photo
     {
         $this->group_id = $group_id;
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPath(): string
-    {
-        return $this->path;
     }
 
     /**

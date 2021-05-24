@@ -6,6 +6,8 @@ declare(strict_types=1);
 namespace Astaroth\VkUtils\Traits;
 
 
+use Spatie\Fork\Fork;
+
 trait ParallelProcessingTrait
 {
 
@@ -16,31 +18,53 @@ trait ParallelProcessingTrait
      * group token - 20 call\sec
      * execute - 25 call in one request
      * https://vk.com/dev/api_requests
-     * @var bool
+     *
+     * if 0 - parallel requests is off
      */
-    protected static bool $parallel_request = false;
+    private int $number_of_parallel_requests = 0;
+
+    public function setNumberOfParallelRequests(int $parallel_request): static
+    {
+        $this->number_of_parallel_requests = $parallel_request;
+        return $this;
+    }
+
+    public function isEnabledParallelRequests(): bool
+    {
+        return (bool)$this->getNumberOfParallelRequests();
+    }
+
 
     /**
-     * Disable parallel uploading
+     * @return int
      */
-    public static function disableParallelRequest(): void
+    public function getNumberOfParallelRequests(): int
     {
-        self::$parallel_request = false;
+        return $this->number_of_parallel_requests;
     }
 
     /**
-     * Enable parallel uploading
+     * Magic
+     * @param callable $callable
+     * @param mixed ...$instances
+     * @return array
      */
-    public static function enableParallelRequest(): void
+    protected function parallelRequest(callable $callable, ...$instances): array
     {
-        static::$parallel_request = true;
+        return Fork::new()
+            ->concurrent($this->getNumberOfParallelRequests())
+            ->run(...array_map(static fn($instance) => static fn() => $callable($instance), ...$instances));
     }
 
     /**
-     * @return bool
+     * @param callable $callable
+     * @param array $instances
+     * @return array
      */
-    public static function isParallelUpload(): bool
+    protected function nonParallelRequest(callable $callable, array $instances): array
     {
-        return self::$parallel_request;
+        return array_map(static function ($instance) use ($callable) {
+            return $callable($instance);
+        }, $instances);
     }
 }

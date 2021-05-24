@@ -17,10 +17,12 @@ class PostTest extends TestCase
     {
         $this->post = new Post();
         $this->post->setDefaultToken('');
+
+        $this->post->setNumberOfParallelRequests(10);
     }
 
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $post = $this->post->create
         (

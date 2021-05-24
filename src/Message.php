@@ -26,7 +26,7 @@ final class Message extends Builder
                 ['random_id' => random_int(PHP_INT_MIN, PHP_INT_MAX)]));
         };
 
-        return self::isParallelUpload()
+        return $this->isEnabledParallelRequests()
             ? $this->parallelRequest($callable, $message)
             : $this->nonParallelRequest($callable, $message);
     }

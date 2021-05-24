@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnusedParameterInspection */
 
 declare(strict_types=1);
 
@@ -8,10 +8,12 @@ namespace Astaroth\VkUtils;
 use Astaroth\VkUtils\Contracts\IDocsUpload;
 use Astaroth\VkUtils\Contracts\IFileUploader;
 use Astaroth\VkUtils\Contracts\IPhoto;
+use Astaroth\VkUtils\Contracts\IStories;
 use Astaroth\VkUtils\Contracts\IVideo;
 use Astaroth\VkUtils\Traits\ParallelProcessingTrait;
+use Astaroth\VkUtils\Uploading\AbstractDoc;
+use Astaroth\VkUtils\Uploading\AbstractStories;
 use Astaroth\VkUtils\Uploading\Doc;
-use Astaroth\VkUtils\Uploading\DocCompatibility;
 use Astaroth\VkUtils\Uploading\Photo;
 use Astaroth\VkUtils\Uploading\Video;
 use Closure;
@@ -69,10 +71,10 @@ class Uploader extends Client implements IFileUploader
     /**
      * @param ?int $id
      * @param string $selector
-     * @return ?array
+     * @return array|Throwable
      * @throws Throwable
      */
-    private function getMessagesUploadServer(?int $id, string $selector): ?array
+    private function getMessagesUploadServer(?int $id, string $selector): array|Throwable
     {
         if ($selector === 'doc' || $selector === 'audio_message' || $selector === 'graffiti') {
             return $this->request('docs.getMessagesUploadServer', ['type' => $selector, 'peer_id' => $id]);
@@ -82,9 +84,42 @@ class Uploader extends Client implements IFileUploader
             return $this->request('photos.getMessagesUploadServer', ['group_id' => $id]);
         }
 
-        return null;
+        return $this->createException(self::RUNTIME_EXCEPTION, 'Incorrect selector');
     }
 
+    /**
+     * @param bool $add_to_news
+     * @param string|null $user_ids
+     * @param string|null $reply_to_story
+     * @param string|null $link_text
+     * @param string|null $link_url
+     * @param int|null $group_id
+     * @param string|null $clickable_stickers
+     * @param string $selector
+     * @return array|Throwable
+     * @throws Throwable
+     * @noinspection PhpUnusedParameterInspection
+     */
+    private function getStoriesUploadServer(
+        bool $add_to_news,
+        ?string $user_ids,
+        ?string $reply_to_story,
+        ?string $link_text,
+        ?string $link_url,
+        ?int $group_id,
+        ?string $clickable_stickers,
+        string $selector): array|Throwable
+    {
+        if ($selector === 'video' || $selector === 'photo') {
+            $params = get_defined_vars();
+            $type = ucfirst($params['selector']);
+            unset($params['selector']);
+
+            return $this->request('stories.get' . $type . 'UploadServer', $params);
+        }
+
+        return $this->createException(self::RUNTIME_EXCEPTION, 'Incorrect selector');
+    }
 
     /**
      * @param string $path
@@ -102,6 +137,7 @@ class Uploader extends Client implements IFileUploader
      * @param bool|null $compression
      * @return string
      * @throws Throwable
+     * @noinspection PhpUnusedParameterInspection
      */
     protected function videoSave(
         string $path,
@@ -148,7 +184,7 @@ class Uploader extends Client implements IFileUploader
      * @return string
      * @throws Throwable
      */
-    private function docsSave(DocCompatibility $docs): string
+    private function docsSave(AbstractDoc $docs): string
     {
         $data = $this->request('docs.save',
             [
@@ -204,7 +240,7 @@ class Uploader extends Client implements IFileUploader
 
     private function callableDocCompatibility(): Closure
     {
-        return function (DocCompatibility $DocInstances) {
+        return function (AbstractDoc $DocInstances) {
             $data = $this->getMessagesUploadServer($DocInstances->getPeerId(), $DocInstances->getFileType());
             $response = $this->uploadFile
             (
@@ -233,15 +269,51 @@ class Uploader extends Client implements IFileUploader
         };
     }
 
+    private function callableStories(): Closure
+    {
+        return function (AbstractStories $StoriesInstances) {
+            $data = $this->getStoriesUploadServer(
+                $StoriesInstances->isAddToNews(),
+                $StoriesInstances->getUserIds(),
+                $StoriesInstances->getReplyToStory(),
+                $StoriesInstances->getLinkText(),
+                $StoriesInstances->getLinkUrl(),
+                $StoriesInstances->getGroupId(),
+                $StoriesInstances->getClickableStickers(),
+                $StoriesInstances->getTypeStore()
+            );
+
+            $result = $this->uploadFile
+            (
+                $data['response']['upload_url'],
+                $StoriesInstances->getPath(),
+                $StoriesInstances->getTypeStore() === 'video' ? 'video_file' : 'file'
+            );
+
+            return current($this->storiesSave($result['response']['upload_result']));
+
+        };
+    }
 
     /**
      * @throws Throwable
      */
-    private function saver(IDocsUpload|Photo|Video ...$CompatibilityInstances): array
+    private function storiesSave(string $upload_results, bool $extended = false, string $fields = null): array
+    {
+        return array_map(static fn($story) => sprintf("story%s_%s",
+            $story['owner_id'],
+            $story['id']),
+            $this->request('stories.save', get_defined_vars())['response']['items']);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    private function saver(AbstractDoc|Photo|Video|AbstractStories ...$CompatibilityInstances): array
     {
         $callable = function ($CompatibilityInstances) {
 
-            if ($CompatibilityInstances instanceof DocCompatibility) {
+            if ($CompatibilityInstances instanceof AbstractDoc) {
                 return $this->callableDocCompatibility()($CompatibilityInstances);
             }
             if ($CompatibilityInstances instanceof Photo) {
@@ -250,11 +322,14 @@ class Uploader extends Client implements IFileUploader
             if ($CompatibilityInstances instanceof Video) {
                 return $this->callableVideo()($CompatibilityInstances);
             }
+            if ($CompatibilityInstances instanceof AbstractStories) {
+                return $this->callableStories()($CompatibilityInstances);
+            }
 
             return self::createException(self::RUNTIME_EXCEPTION, "Callback function error, no compatibility instance found ");
         };
 
-        return self::isParallelUpload()
+        return $this->isEnabledParallelRequests()
             ? $this->parallelRequest($callable, $CompatibilityInstances)
             : $this->nonParallelRequest($callable, $CompatibilityInstances);
     }
@@ -262,7 +337,7 @@ class Uploader extends Client implements IFileUploader
     /**
      * @throws Throwable
      */
-    public function upload(IDocsUpload|IVideo|IPhoto ...$CompatibilityInstances): array
+    public function upload(IDocsUpload|IVideo|IPhoto|IStories ...$CompatibilityInstances): array
     {
         return $this->saver(...$CompatibilityInstances);
     }

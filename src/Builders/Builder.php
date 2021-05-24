@@ -10,5 +10,9 @@ use Astaroth\VkUtils\Client;
 
 abstract class Builder extends Client
 {
+    /**
+     * Create object builder
+     * @return array
+     */
     abstract public function create() : array;
 }

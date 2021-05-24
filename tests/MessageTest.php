@@ -17,6 +17,8 @@ class MessageTest extends TestCase
     {
         $this->message = new Message();
         $this->message->setDefaultToken('');
+
+        $this->message->setNumberOfParallelRequests(1);
     }
 
     /**

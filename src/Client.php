@@ -11,8 +11,6 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
-use function Amp\ParallelFunctions\parallelMap;
-use function Amp\Promise\wait;
 
 /**
  * Class Client
@@ -235,31 +233,5 @@ class Client implements ClientContract
          * @psalm-suppress UndefinedClass
          */
         return new $exception($message, $code);
-    }
-
-
-    /**
-     * @param callable $callable
-     * @param array $instances
-     * @return array
-     * @throws Throwable
-     */
-    protected function parallelRequest(callable $callable, array $instances): array
-    {
-        return wait(parallelMap($instances, function ($instance) use ($callable) {
-            return $callable($instance);
-        }));
-    }
-
-    /**
-     * @param callable $callable
-     * @param array $instances
-     * @return array
-     */
-    protected function nonParallelRequest(callable $callable, array $instances): array
-    {
-        return array_map(static function ($instance) use ($callable) {
-            return $callable($instance);
-        }, $instances);
     }
 }

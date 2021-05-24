@@ -181,8 +181,8 @@ $uploader->setDefaultToken($token);
 $message = new Message();
 $message->setDefaultToken($token);
 
-Uploader::enableParallelRequest();
-Message::enableParallelRequest();
+$uploader->setNumberOfParallelRequests(3);
+$message->setNumberOfParallelRequests(2);
 
 //Сообщения будут отправлены параллельно!
 $message = $message->create(
@@ -212,6 +212,6 @@ $message = $message->create(
 ```
 
 Необходимо быть крайне осторожным с параллельными запросами, так можно получить `flood control` от вконтакте\
-Рекомендуется использовать `Uploader::enableParallelRequest()` только с токеном сообщества\
-Также стоить заметить, что при использовании `Message::enableParallelRequest()` сообщения отправляются в случайном
+Рекомендуется использовать `Uploader::setNumberOfParallelRequests()` только с токеном сообщества\
+Также стоить заметить, что при использовании `Message::setNumberOfParallelRequests()` сообщения отправляются в случайном
 порядке, это может быть полезно при отправке нескольких сообщений с вложениями
