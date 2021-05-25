@@ -22,7 +22,7 @@ final class Post extends Builder
     public function create(IPostBuilder ...$post): array
     {
         $callable = function ($post) {
-            return $this->request('wall.post', get_object_vars($post));
+            return $this->request('wall.post', get_object_vars($post))['response']['post_id'];
         };
 
         return $this->isEnabledParallelRequests()
