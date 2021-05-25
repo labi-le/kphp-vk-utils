@@ -9,7 +9,6 @@ namespace Astaroth\VkUtils;
 use Astaroth\VkUtils\Builders\Builder;
 use Astaroth\VkUtils\Contracts\IPostBuilder;
 use Astaroth\VkUtils\Traits\ParallelProcessingTrait;
-
 use Throwable;
 
 final class Post extends Builder
@@ -22,7 +21,9 @@ final class Post extends Builder
     public function create(IPostBuilder ...$post): array
     {
         $callable = function ($post) {
-            return $this->request('wall.post', get_object_vars($post))['response']['post_id'];
+            $params = get_object_vars($post);
+            $post_id = $this->request('wall.post', $params)['response']['post_id'];
+            return sprintf('wall%s_%s', $params['owner_id'], $post_id);
         };
 
         return $this->isEnabledParallelRequests()
