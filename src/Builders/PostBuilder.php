@@ -15,7 +15,7 @@ final class PostBuilder implements IPostBuilder
     public bool $from_group = false;
 
     public ?string $message = null;
-    public ?array $attachments = null;
+    public ?string $attachments = null;
     public ?string $services = null;
     public ?string $signed = null;
 
@@ -78,7 +78,7 @@ final class PostBuilder implements IPostBuilder
      */
     public function setAttachments(...$attachments): PostBuilder
     {
-        $this->attachments = $attachments;
+        $this->attachments = implode(',', $attachments);
         return $this;
     }
 
