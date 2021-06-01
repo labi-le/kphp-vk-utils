@@ -92,13 +92,13 @@ $request = new Request('wall.get', ['owner_id' => 1], "some_token");
 #### Attachment upload constructor
 
 ```php
-use Astaroth\VkUtils\Uploader;
-use Astaroth\VkUtils\Uploading\AudioMessage;
-use Astaroth\VkUtils\Uploading\Graffiti;
-use Astaroth\VkUtils\Uploading\Photo;
-use Astaroth\VkUtils\Uploading\Video;
+use Astaroth\VkUtils\Uploading\MessagesUploader;
+use Astaroth\VkUtils\Uploading\Objects\AudioMessage;
+use Astaroth\VkUtils\Uploading\Objects\Graffiti;
+use Astaroth\VkUtils\Uploading\Objects\Photo;
+use Astaroth\VkUtils\Uploading\Objects\Video;
 
-$uploader = new Uploader();
+$uploader = new MessagesUploader();
 $uploader->setDefaultToken('PUT TOKEN');
 
 $attachments = $uploader->upload
@@ -123,13 +123,13 @@ $attachments = $uploader->upload
 ```php
 
 use Astaroth\VkUtils\Builders;
-use Astaroth\VkUtils\Uploader;
-use Astaroth\VkUtils\Uploading\Photo;
+use Astaroth\VkUtils\Uploading\MessagesUploader;
+use Astaroth\VkUtils\Uploading\Objects\Photo;
 use Astaroth\VkUtils\Message;
 
 $token = 'PUT TOKEN';
 
-$uploader = new Uploader();
+$uploader = new MessagesUploader();
 $message = new Message();
 
 $uploader->setDefaultToken($token);
@@ -170,14 +170,14 @@ Turn on parallel requests to VK
 ```php
 
 use Astaroth\VkUtils\Builders;
-use Astaroth\VkUtils\Uploader;
+use Astaroth\VkUtils\Uploading\MessagesUploader;
 use Astaroth\VkUtils\Message;
-use Astaroth\VkUtils\Uploading\Photo;
-use Astaroth\VkUtils\Uploading\Video;
+use Astaroth\VkUtils\Uploading\Objects\Photo;
+use Astaroth\VkUtils\Uploading\Objects\Video;
 
 $token = 'PUT TOKEN';
 
-$uploader = new Uploader();
+$uploader = new MessagesUploader();
 $uploader->setDefaultToken($token);
 
 $message = new Message();
@@ -212,6 +212,7 @@ $message = $message->create(
         ->setMessage('who was Zarathustra? ')
 );
 ```
+The example does not indicate work with the wall and, accordingly, with the loader, since everything is extremely similar
 
 You need to be careful with parallel requests, this is how you can get `flood control` from VKontakte\
 It is recommended to use `Uploader::setNumberOfParallelRequests()` only with the community token\

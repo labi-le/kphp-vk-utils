@@ -87,16 +87,16 @@ $request = new Request('wall.get', ['owner_id' => 1], "some_token");
 
 ### Конструкторы
 
-#### Конструктор аплоадинга вложений
+#### Конструктор аплоадинга вложений для возможной отправки в личные сообщения 
 
 ```php
-use Astaroth\VkUtils\Uploader;
-use Astaroth\VkUtils\Uploading\AudioMessage;
-use Astaroth\VkUtils\Uploading\Graffiti;
-use Astaroth\VkUtils\Uploading\Photo;
-use Astaroth\VkUtils\Uploading\Video;
+use Astaroth\VkUtils\Uploading\MessagesUploader;
+use Astaroth\VkUtils\Uploading\Objects\AudioMessage;
+use Astaroth\VkUtils\Uploading\Objects\Graffiti;
+use Astaroth\VkUtils\Uploading\Objects\Photo;
+use Astaroth\VkUtils\Uploading\Objects\Video;
 
-$uploader = new Uploader();
+$uploader = new MessagesUploader();
 $uploader->setDefaultToken('PUT TOKEN');
 
 $attachments = $uploader->upload
@@ -121,13 +121,13 @@ $attachments = $uploader->upload
 ```php
 
 use Astaroth\VkUtils\Builders;
-use Astaroth\VkUtils\Uploader;
+use Astaroth\VkUtils\Uploading\MessagesUploader;
 use Astaroth\VkUtils\Message;
-use Astaroth\VkUtils\Uploading\Photo;
+use Astaroth\VkUtils\Uploading\Objects\Photo;
 
 $token = 'PUT TOKEN';
 
-$uploader = new Uploader();
+$uploader = new MessagesUploader();
 $message = new Message();
 
 $uploader->setDefaultToken($token);
@@ -168,14 +168,14 @@ $message = $message->create(
 ```php
 
 use Astaroth\VkUtils\Builders;
-use Astaroth\VkUtils\Uploader;
+use Astaroth\VkUtils\Uploading\MessagesUploader;
 use Astaroth\VkUtils\Message;
-use Astaroth\VkUtils\Uploading\Photo;
-use Astaroth\VkUtils\Uploading\Video;
+use Astaroth\VkUtils\Uploading\Objects\Photo;
+use Astaroth\VkUtils\Uploading\Objects\Video;
 
 $token = 'PUT TOKEN';
 
-$uploader = new Uploader();
+$uploader = new MessagesUploader();
 $uploader->setDefaultToken($token);
 
 $message = new Message();
@@ -210,8 +210,9 @@ $message = $message->create(
         ->setMessage('кем был Заратустра?')
 );
 ```
+В примере не указана работа со стеной и соответственно с загрузчиком так как всё крайне схоже
 
 Необходимо быть крайне осторожным с параллельными запросами, так можно получить `flood control` от вконтакте\
-Рекомендуется использовать `Uploader::setNumberOfParallelRequests()` только с токеном сообщества\
+Рекомендуется использовать `*Uploader::setNumberOfParallelRequests()` только с токеном сообщества\
 Также стоить заметить, что при использовании `Message::setNumberOfParallelRequests()` сообщения отправляются в случайном
 порядке, это может быть полезно при отправке нескольких сообщений с вложениями

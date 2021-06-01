@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace Astaroth\VkUtils\Contracts;
 
 
-use Astaroth\VkUtils\Uploading\Photo;
+use Astaroth\VkUtils\Uploading\Objects\Photo;
 
 interface IPhoto
 {

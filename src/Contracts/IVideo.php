@@ -5,7 +5,8 @@ declare(strict_types=1);
 
 namespace Astaroth\VkUtils\Contracts;
 
-use Astaroth\VkUtils\Uploading\Video;
+
+use Astaroth\VkUtils\Uploading\Objects\Video;
 
 /**
  * https://vk.com/dev/video.save

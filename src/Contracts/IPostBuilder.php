@@ -7,6 +7,7 @@ namespace Astaroth\VkUtils\Contracts;
 
 
 use Astaroth\VkUtils\Builders\PostBuilder;
+use Astaroth\VkUtils\Uploading\WallUploader;
 
 interface IPostBuilder
 {
@@ -44,10 +45,10 @@ interface IPostBuilder
      *
      * <type><owner_id>_<media_id>,<type><owner_id>_<media_id>
      *
-     * @param ...$attachments
+     * @param string ...$attachments
      * @return PostBuilder
      */
-    public function setAttachments(...$attachments): PostBuilder;
+    public function setAttachments(WallUploader|string ...$attachments): PostBuilder;
 
     /**
      * List of services or websites the update will be exported to, if the user has so requested. Sample values: twitter, facebook

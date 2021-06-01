@@ -3,33 +3,55 @@
 declare(strict_types=1);
 
 
-use Astaroth\VkUtils\Uploader;
-use Astaroth\VkUtils\Uploading\AudioMessage;
-use Astaroth\VkUtils\Uploading\Doc;
-use Astaroth\VkUtils\Uploading\Graffiti;
-use Astaroth\VkUtils\Uploading\Photo;
-use Astaroth\VkUtils\Uploading\PhotoStories;
-use Astaroth\VkUtils\Uploading\Video;
-use Astaroth\VkUtils\Uploading\VideoStories;
+use Astaroth\VkUtils\Uploading\MessagesUploader;
+use Astaroth\VkUtils\Uploading\Objects\AudioMessage;
+use Astaroth\VkUtils\Uploading\Objects\Doc;
+use Astaroth\VkUtils\Uploading\Objects\Graffiti;
+use Astaroth\VkUtils\Uploading\Objects\Photo;
+use Astaroth\VkUtils\Uploading\Objects\PhotoStories;
+use Astaroth\VkUtils\Uploading\Objects\Video;
+use Astaroth\VkUtils\Uploading\Objects\VideoStories;
+use Astaroth\VkUtils\Uploading\WallUploader;
 use PHPUnit\Framework\TestCase;
 use function PHPUnit\Framework\assertIsString;
 
 class UploaderTest extends TestCase
 {
+    private const ACCESS_TOKEN = "";
 
-    private Uploader $uploader;
+    private MessagesUploader $messageUploader;
+    private WallUploader $wallUploader;
 
     protected function setUp(): void
     {
-        $this->uploader = new Uploader();
-        $this->uploader->setDefaultToken('');
+        $this->wallUploader = new WallUploader();
+        $this->messageUploader = new MessagesUploader();
 
-        $this->uploader->setNumberOfParallelRequests(3);
+        $this->wallUploader->setDefaultToken(self::ACCESS_TOKEN);
+        $this->messageUploader->setDefaultToken(self::ACCESS_TOKEN);
+
+        $this->wallUploader->setNumberOfParallelRequests(3);
+        $this->messageUploader->setNumberOfParallelRequests(3);
     }
 
-    public function testUpload(): void
+    public function testWallUploader(): void
     {
-        $attachments = $this->uploader->upload(
+        $attachments = $this->wallUploader->upload(
+            new Doc('https://images.dog.ceo/breeds/newfoundland/n02111277_11806.jpg'),
+            new Photo('https://images.dog.ceo/breeds/dane-great/n02109047_31049.jpg'),
+
+            (new Video('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4'))
+                ->setName('Test Video')
+                ->setIsPrivate(true)
+
+        );
+
+        array_walk($attachments, static fn($element) => assertIsString($element));
+    }
+
+    public function testMessageUploader(): void
+    {
+        $attachments = $this->messageUploader->upload(
             new Doc('https://images.dog.ceo/breeds/newfoundland/n02111277_11806.jpg'),
             new AudioMessage('https://psv4.userapi.com/c505636//u259166248/audiomsg/d47/6a42fe5ebc.mp3'),
             new Graffiti('https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png'),

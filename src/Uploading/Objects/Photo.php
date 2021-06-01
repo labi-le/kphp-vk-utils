@@ -3,16 +3,18 @@
 declare(strict_types=1);
 
 
-namespace Astaroth\VkUtils\Uploading;
+namespace Astaroth\VkUtils\Uploading\Objects;
 
 
 use Astaroth\VkUtils\Contracts\IPhoto;
-use Astaroth\VkUtils\Traits\AttachmentsUploadTrait;
+use Astaroth\VkUtils\Uploading\Objects\Abstract\AbstractFile;
 
-final class Photo implements IPhoto
+/**
+ * Class Photo
+ * @package Astaroth\VkUtils\Uploading\Objects
+ */
+final class Photo extends AbstractFile implements IPhoto
 {
-    use AttachmentsUploadTrait;
-
     private ?int $group_id = null;
 
     private string $file_type = 'photo';
@@ -43,4 +45,5 @@ final class Photo implements IPhoto
     {
         return $this->file_type;
     }
+
 }

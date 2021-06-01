@@ -3,24 +3,22 @@
 declare(strict_types=1);
 
 
-namespace Astaroth\VkUtils\Uploading;
+namespace Astaroth\VkUtils\Uploading\Objects\Abstract;
 
 
 use Astaroth\VkUtils\Contracts\IDocsUpload;
-use Astaroth\VkUtils\Traits\AttachmentsUploadTrait;
+use Astaroth\VkUtils\Contracts\ISave;
 
-abstract class AbstractDoc implements IDocsUpload
+abstract class AbstractDoc extends AbstractFile implements IDocsUpload, ISave
 {
-    use AttachmentsUploadTrait;
-
-    protected ?string $title = null;
-    protected ?string $tags = null;
-    protected bool $return_tags = false;
+    public ?string $title = null;
+    public ?string $tags = null;
+    public bool $return_tags = false;
 
     protected string $file_type;
 
-    protected ?int $peer_id = null;
-    protected string $file;
+    public ?int $peer_id = null;
+    public string $file;
 
     /**
      * @inheritDoc
@@ -95,5 +93,10 @@ abstract class AbstractDoc implements IDocsUpload
     public function getFileType(): string
     {
         return $this->file_type;
+    }
+
+    public function getMethod(): string
+    {
+        return "docs.save";
     }
 }

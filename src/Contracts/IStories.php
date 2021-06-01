@@ -6,7 +6,7 @@ declare(strict_types=1);
 namespace Astaroth\VkUtils\Contracts;
 
 
-use Astaroth\VkUtils\Uploading\AbstractStories;
+use Astaroth\VkUtils\Uploading\Objects\Abstract\AbstractStories;
 
 /**
  * https://vk.com/dev/stories.getVideoUploadServer
@@ -86,5 +86,4 @@ interface IStories
      */
     public function setClickableStickers(string $clickable_stickers): AbstractStories;
 
-    public function getTypeStore(): string;
 }
