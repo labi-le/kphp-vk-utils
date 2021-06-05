@@ -29,6 +29,7 @@ final class MessageBuilder implements IMessageBuilder
 
     public bool $dont_parse_links = false;
     public bool $disable_mentions = false;
+    public ?int $expire_ttl = null;
 
 
     /**
@@ -164,6 +165,15 @@ final class MessageBuilder implements IMessageBuilder
     public function setDisableMentions(bool $disable_mentions): MessageBuilder
     {
         $this->disable_mentions = $disable_mentions;
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setExpireTtl(int $expire_ttl): MessageBuilder
+    {
+        $this->expire_ttl = $expire_ttl;
         return $this;
     }
 }

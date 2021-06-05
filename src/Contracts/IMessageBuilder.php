@@ -160,5 +160,10 @@ interface IMessageBuilder
      */
     public function setDisableMentions(bool $disable_mentions): MessageBuilder;
 
+    /**
+     * @param int $expire_ttl
+     * @return MessageBuilder
+     */
+    public function setExpireTTl(int $expire_ttl): MessageBuilder;
 
 }
