@@ -163,7 +163,8 @@ class Client implements ClientContract
      */
     protected function getResponseData(ResponseInterface $response): array
     {
-        $data = json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+        /** @noinspection JsonEncodingApiUsageInspection */
+        $data = json_decode((string)$response->getBody(), true);
 
         $this->passError ?: $this->checkErrors($data);
         return $data;
