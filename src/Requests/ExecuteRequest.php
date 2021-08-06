@@ -25,8 +25,9 @@ class ExecuteRequest extends Request
 
     /**
      * @param IScriptable[] $requests
+     * @return static
      */
-    public static function make(array $requests, ?string $token = null): static
+    public static function make(array $requests, ?string $token = null): ExecuteRequest
     {
         $scripts = array_map(static function ($request): string {
             if (!$request instanceof IScriptable) {
@@ -38,8 +39,8 @@ class ExecuteRequest extends Request
             return $request->toScript();
         }, $requests);
 
+        $parameters = [];
         $parameters['code'] = sprintf('return [%s];', implode(', ', $scripts));
-
         return new static($parameters, $token);
     }
 }

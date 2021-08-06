@@ -6,8 +6,6 @@ declare(strict_types=1);
 namespace Astaroth\VkUtils\Contracts;
 
 
-use Astaroth\VkUtils\Uploading\Objects\Abstract\AbstractStories;
-
 /**
  * https://vk.com/dev/stories.getVideoUploadServer
  * Interface IStories
@@ -18,23 +16,23 @@ interface IStories
     /**
      * Add story to news
      * @param bool $add_to_news
-     * @return mixed
+     * @return static
      */
-    public function setAddToNews(bool $add_to_news): AbstractStories;
+    public function setAddToNews(bool $add_to_news);
 
     /**
      * User IDs who can see the story
-     * @param ...$user_ids
-     * @return AbstractStories
+     * @param int ...$user_ids
+     * @return static
      */
-    public function setUserIds(...$user_ids): AbstractStories;
+    public function setUserIds(int ...$user_ids);
 
     /**
      * ID of the story to reply with the current
      * @param string $reply_to_story
-     * @return AbstractStories
+     * @return static
      */
-    public function setReplyToStory(string $reply_to_story): AbstractStories;
+    public function setReplyToStory(string $reply_to_story);
 
     /**
      * Link text to navigate from story (only for community stories). Possible values:
@@ -61,29 +59,29 @@ interface IStories
      * read - "Read"
      * game - "Play"
      * @param string $link_text
-     * @return AbstractStories
+     * @return static
      */
-    public function setLinkText(string $link_text): AbstractStories;
+    public function setLinkText(string $link_text);
 
     /**
      * Link address for going from history
      * @param string $link_url
-     * @return AbstractStories
+     * @return static
      */
-    public function setLinkUrl(string $link_url): AbstractStories;
+    public function setLinkUrl(string $link_url);
 
     /**
      * ID of the community to upload the story (should be verified or with the "fire" icon)
      * @param int $group_id
-     * @return AbstractStories
+     * @return static
      */
-    public function setGroupId(int $group_id): AbstractStories;
+    public function setGroupId(int $group_id);
 
     /**
      * https://vk.com/dev//objects/clickable_stickers
      * @param string $clickable_stickers
-     * @return AbstractStories
+     * @return static
      */
-    public function setClickableStickers(string $clickable_stickers): AbstractStories;
+    public function setClickableStickers(string $clickable_stickers);
 
 }

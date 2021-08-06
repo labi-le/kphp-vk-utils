@@ -4,13 +4,13 @@
 [![Packagist Stars](https://img.shields.io/packagist/stars/labile/vk-utils)](https://packagist.org/packages/labile/vk-utils/stats)
 [![Packagist Stats](https://img.shields.io/packagist/dt/labile/vk-utils)](https://packagist.org/packages/labile/vk-utils/stats)
 
-## Установка
+## Installation
 
 `composer require labile/vk-utils`
 
-## А как использовать?
+## Как это использовать?
 
-### Простой пример
+### Простой запрос
 
 ```php
 use Astaroth\VkUtils\Client;
@@ -20,48 +20,34 @@ $api = new Client;
 $response = $api->request('wall.get', ['owner_id' => 1]);
 ```
 
-### Используем Request класс
+### Используем класс ExecuteRequest
 
+Отправка нескольких запросов одновременно
 ```php
-use Astaroth\VkUtils\Client;
+use Astaroth\VkUtils\Execute;
 use Astaroth\VkUtils\Requests\Request;
 
-$api = new Client;
-
-$request = new Request('wall.get', ['owner_id' => 1]);
-$response = $api->send($request);
-```
-
-### Используем ExecuteRequest класс
-
-Отправляем несколько запросов одновременно
-
-```php
-use Astaroth\VkUtils\Client;
-use Astaroth\VkUtils\Requests\ExecuteRequest;
-use Astaroth\VkUtils\Requests\Request;
-
-$api = new Client();
+$api = new Execute;
 $api->setDefaultToken('PUT ACCESS TOKEN');
-$execute = ExecuteRequest::make([
+$execute = [
     new Request('wall.get', ['owner_id' => 1]),
     new Request('wall.get', ['owner_id' => 2]),
-    // ...много много запросов
+    // ...more request
     new Request('wall.get', ['owner_id' => 25]),
-    ]);
+    ];
 
 $response = $api->send($execute);
 ```
 
-### Используем необходимую версию апи
+### Использование требуемой версии API
 
 ```php
 use Astaroth\VkUtils\Client;
 
-$api = new Client('5.110');
+$api = new Client('5.131');
 ```
 
-### Используем токен для всех запросов
+### Использование токена для запросов
 
 Установить токен по умолчанию в клиенте
 
@@ -73,40 +59,39 @@ $api = new Client();
 $api->setDefaultToken("PUT TOKEN");
 ```
 
-Ну или можно вот так
-
+или так
 ```php
 use Astaroth\VkUtils\Requests\Request;
 use Astaroth\VkUtils\Client;
 
 $api = new Client;
 
-// Токен в запросе в приоритете над setDefaultToken
+// Токен в запросе имеет приоритет над setDefaultToken
 $request = new Request('wall.get', ['owner_id' => 1], "some_token");
 ```
 
 ### Конструкторы
 
-#### Конструктор аплоадинга вложений для возможной отправки в личные сообщения 
+#### Конструктор загрузки вложений
 
 ```php
-use Astaroth\VkUtils\Uploading\MessagesUploader;
-use Astaroth\VkUtils\Uploading\Objects\AudioMessage;
-use Astaroth\VkUtils\Uploading\Objects\Graffiti;
-use Astaroth\VkUtils\Uploading\Objects\Photo;
-use Astaroth\VkUtils\Uploading\Objects\Video;
+use Astaroth\VkUtils\Builders\Attachments\Message\Graffiti;
+use Astaroth\VkUtils\Builders\Attachments\Photo;
+use Astaroth\VkUtils\Builders\Attachments\Video;
+use Astaroth\VkUtils\Uploader;
+use Astaroth\VkUtils\Builders\Attachments\Message\AudioMessage;
 
-$uploader = new MessagesUploader();
+$uploader = new Uploader();
 $uploader->setDefaultToken('PUT TOKEN');
 
 $attachments = $uploader->upload
 (
-    new Photo('https://images.dog.ceo/breeds/sheepdog-english/n02105641_8701.jpg'),
-    new Photo('https://images.dog.ceo/breeds/schipperke/n02104365_1292.jpg'),
-    new Photo('https://images.dog.ceo/breeds/ovcharka-caucasian/IMG_20190528_194200.jpg'),
+    new Photo("dog.jpg"),
 
     new AudioMessage('meow.mp3'),
     
+    //загрузка по ссылке временно не работает
+    //но на обычном php это работает
     (new Video('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4'))
         ->setName('4 Biggers Escapes')
         ->setDescription('The video has nothing interesting, just an example')
@@ -116,103 +101,25 @@ $attachments = $uploader->upload
 );
 ```
 
-#### Конструктор сообщений
+#### Builder
 
 ```php
 
 use Astaroth\VkUtils\Builders;
-use Astaroth\VkUtils\Uploading\MessagesUploader;
-use Astaroth\VkUtils\Message;
-use Astaroth\VkUtils\Uploading\Objects\Photo;
+use Astaroth\VkUtils\Builders\Message;
+use Astaroth\VkUtils\Builders\Post;
 
 $token = 'PUT TOKEN';
 
-$uploader = new MessagesUploader();
-$message = new Message();
+$builder = new \Astaroth\VkUtils\Builder();
 
-$uploader->setDefaultToken($token);
-$message->setDefaultToken($token);
+$builders[] = (new Message)
+    ->setMessage("привет меня зовут лола!")
+    ->setPeerId(418618);
 
+$builders[] = (new Post)
+    ->setMessage("привет папищики")
 
-$message = $message->create(
-    (new Builders\MessageBuilder())
-        ->setUserId(418618)
-        ->setMessage('10 Dogs')
-        ->setAttachment
-        (
-            'photo418618_297326744',
-            ...$uploader->upload
-        (
-            new Photo('https://images.dog.ceo/breeds/sheepdog-english/n02105641_8701.jpg'),
-            new Photo('https://images.dog.ceo/breeds/schipperke/n02104365_1292.jpg'),
-            new Photo('https://images.dog.ceo/breeds/waterdog-spanish/20190208_063211.jpg'),
-            new Photo('https://images.dog.ceo/breeds/mountain-swiss/n02107574_2222.jpg'),
-            new Photo('https://images.dog.ceo/breeds/husky/n02110185_11783.jpg'),
-            new Photo('https://images.dog.ceo/breeds/pointer-germanlonghair/hans3.jpg'),
-        )
-        ),
-    (new Builders\MessageBuilder())
-        ->setUserId(418618)
-        ->setMessage('2 sms'),
-
-    (new Builders\MessageBuilder())
-        ->setUserId(418618)
-        ->setMessage('3 sms'),
+$response = $builder->create(...$builders)
 );
 ```
-
-#### Нужно больше скорости?
-
-Включи параллельные запросы к вк
-
-```php
-
-use Astaroth\VkUtils\Builders;
-use Astaroth\VkUtils\Uploading\MessagesUploader;
-use Astaroth\VkUtils\Message;
-use Astaroth\VkUtils\Uploading\Objects\Photo;
-use Astaroth\VkUtils\Uploading\Objects\Video;
-
-$token = 'PUT TOKEN';
-
-$uploader = new MessagesUploader();
-$uploader->setDefaultToken($token);
-
-$message = new Message();
-$message->setDefaultToken($token);
-
-$uploader->setNumberOfParallelRequests(3);
-$message->setNumberOfParallelRequests(2);
-
-//Сообщения будут отправлены параллельно!
-$message = $message->create(
-    (new Builders\MessageBuilder())
-        ->setUserId(418618)
-        ->setMessage('10 Dogs')
-        ->setAttachment
-        (
-            'photo418618_297326744',
-            ...$uploader->upload
-        (
-            new Photo('https://images.dog.ceo/breeds/mountain-swiss/n02107574_2222.jpg'),
-            new Photo('https://images.dog.ceo/breeds/husky/n02110185_11783.jpg'),
-            new Photo('https://images.dog.ceo/breeds/pointer-germanlonghair/hans3.jpg'),
-
-            (new Video('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4'))
-                ->setName('4 Biggers Escapes')
-                ->setDescription('The video has nothing interesting, just an example')
-                ->setWallpost(true),
-        )
-        ),
-
-    (new Builders\MessageBuilder())
-        ->setUserId(418618)
-        ->setMessage('кем был Заратустра?')
-);
-```
-В примере не указана работа со стеной и соответственно с загрузчиком так как всё крайне схоже
-
-Необходимо быть крайне осторожным с параллельными запросами, так можно получить `flood control` от вконтакте\
-Рекомендуется использовать `*Uploader::setNumberOfParallelRequests()` только с токеном сообщества\
-Также стоить заметить, что при использовании `Message::setNumberOfParallelRequests()` сообщения отправляются в случайном
-порядке, это может быть полезно при отправке нескольких сообщений с вложениями

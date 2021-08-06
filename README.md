@@ -12,7 +12,7 @@
 
 ## How to use it?
 
-### Simple example
+### Simple request
 
 ```php
 use Astaroth\VkUtils\Client;
@@ -39,18 +39,17 @@ $response = $api->send($request);
 Sending multiple requests at the same time
 
 ```php
-use Astaroth\VkUtils\Client;
-use Astaroth\VkUtils\Requests\ExecuteRequest;
+use Astaroth\VkUtils\Execute;
 use Astaroth\VkUtils\Requests\Request;
 
-$api = new Client();
+$api = new Execute;
 $api->setDefaultToken('PUT ACCESS TOKEN');
-$execute = ExecuteRequest::make([
+$execute = [
     new Request('wall.get', ['owner_id' => 1]),
     new Request('wall.get', ['owner_id' => 2]),
     // ...more request
     new Request('wall.get', ['owner_id' => 25]),
-    ]);
+    ];
 
 $response = $api->send($execute);
 ```
@@ -60,7 +59,7 @@ $response = $api->send($execute);
 ```php
 use Astaroth\VkUtils\Client;
 
-$api = new Client('5.110');
+$api = new Client('5.131');
 ```
 
 ### Using a token for requests
@@ -92,23 +91,22 @@ $request = new Request('wall.get', ['owner_id' => 1], "some_token");
 #### Attachment upload constructor
 
 ```php
-use Astaroth\VkUtils\Uploading\MessagesUploader;
-use Astaroth\VkUtils\Uploading\Objects\AudioMessage;
-use Astaroth\VkUtils\Uploading\Objects\Graffiti;
-use Astaroth\VkUtils\Uploading\Objects\Photo;
-use Astaroth\VkUtils\Uploading\Objects\Video;
+use Astaroth\VkUtils\Builders\Attachments\Message\Graffiti;
+use Astaroth\VkUtils\Builders\Attachments\Photo;
+use Astaroth\VkUtils\Builders\Attachments\Video;
+use Astaroth\VkUtils\Uploader;
+use Astaroth\VkUtils\Builders\Attachments\Message\AudioMessage;
 
-$uploader = new MessagesUploader();
+$uploader = new Uploader();
 $uploader->setDefaultToken('PUT TOKEN');
 
 $attachments = $uploader->upload
 (
-    new Photo('https://images.dog.ceo/breeds/sheepdog-english/n02105641_8701.jpg'),
-    new Photo('https://images.dog.ceo/breeds/schipperke/n02104365_1292.jpg'),
-    new Photo('https://images.dog.ceo/breeds/ovcharka-caucasian/IMG_20190528_194200.jpg'),
+    new Photo("dog.jpg"),
 
     new AudioMessage('meow.mp3'),
     
+    //downloading from the link temporarily does not work
     (new Video('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4'))
         ->setName('4 Biggers Escapes')
         ->setDescription('The video has nothing interesting, just an example')
@@ -118,103 +116,25 @@ $attachments = $uploader->upload
 );
 ```
 
-#### Message constructor
+#### Builder
 
 ```php
 
 use Astaroth\VkUtils\Builders;
-use Astaroth\VkUtils\Uploading\MessagesUploader;
-use Astaroth\VkUtils\Uploading\Objects\Photo;
-use Astaroth\VkUtils\Message;
+use Astaroth\VkUtils\Builders\Message;
+use Astaroth\VkUtils\Builders\Post;
 
 $token = 'PUT TOKEN';
 
-$uploader = new MessagesUploader();
-$message = new Message();
+$builder = new \Astaroth\VkUtils\Builder();
 
-$uploader->setDefaultToken($token);
-$message->setDefaultToken($token);
+$builders[] = (new Message)
+    ->setMessage("hi me name is lola! im lol")
+    ->setPeerId(418618);
 
+$builders[] = (new Post)
+    ->setMessage("hello subscribers")
 
-$message = $message->create(
-    (new Builders\MessageBuilder())
-        ->setUserId(418618)
-        ->setMessage('10 Dogs')
-        ->setAttachment
-        (
-            'photo418618_297326744',
-            ...$uploader->upload
-        (
-            new Photo('https://images.dog.ceo/breeds/sheepdog-english/n02105641_8701.jpg'),
-            new Photo('https://images.dog.ceo/breeds/schipperke/n02104365_1292.jpg'),
-            new Photo('https://images.dog.ceo/breeds/waterdog-spanish/20190208_063211.jpg'),
-            new Photo('https://images.dog.ceo/breeds/mountain-swiss/n02107574_2222.jpg'),
-            new Photo('https://images.dog.ceo/breeds/husky/n02110185_11783.jpg'),
-            new Photo('https://images.dog.ceo/breeds/pointer-germanlonghair/hans3.jpg'),
-        )
-        ),
-    (new Builders\MessageBuilder())
-        ->setUserId(418618)
-        ->setMessage('2 sms'),
-
-    (new Builders\MessageBuilder())
-        ->setUserId(418618)
-        ->setMessage('3 sms'),
+$response = $builder->create(...$builders)
 );
 ```
-
-#### Need more speed?
-
-Turn on parallel requests to VK
-
-```php
-
-use Astaroth\VkUtils\Builders;
-use Astaroth\VkUtils\Uploading\MessagesUploader;
-use Astaroth\VkUtils\Message;
-use Astaroth\VkUtils\Uploading\Objects\Photo;
-use Astaroth\VkUtils\Uploading\Objects\Video;
-
-$token = 'PUT TOKEN';
-
-$uploader = new MessagesUploader();
-$uploader->setDefaultToken($token);
-
-$message = new Message();
-$message->setDefaultToken($token);
-
-$uploader->setNumberOfParallelRequests(3);
-$message->setNumberOfParallelRequests(2);
-
-//Messages will be sent in parallel!
-$message = $message->create(
-    (new Builders\MessageBuilder())
-        ->setUserId(418618)
-        ->setMessage('10 Dogs')
-        ->setAttachment
-        (
-            'photo418618_297326744',
-            ...$uploader->upload
-        (
-            new Photo('https://images.dog.ceo/breeds/mountain-swiss/n02107574_2222.jpg'),
-            new Photo('https://images.dog.ceo/breeds/husky/n02110185_11783.jpg'),
-            new Photo('https://images.dog.ceo/breeds/pointer-germanlonghair/hans3.jpg'),
-
-            (new Video('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4'))
-                ->setName('4 Biggers Escapes')
-                ->setDescription('The video has nothing interesting, just an example')
-                ->setWallpost(true),
-        )
-        ),
-
-    (new Builders\MessageBuilder())
-        ->setUserId(418618)
-        ->setMessage('who was Zarathustra? ')
-);
-```
-The example does not indicate work with the wall and, accordingly, with the loader, since everything is extremely similar
-
-You need to be careful with parallel requests, this is how you can get `flood control` from VKontakte\
-It is recommended to use `Uploader::setNumberOfParallelRequests()` only with the community token\
-It is also worth noting that when using `Message::setNumberOfParallelRequests()` messages are sent in a random
-this can be useful when sending multiple messages with attachments

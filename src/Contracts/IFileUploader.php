@@ -10,5 +10,10 @@ namespace Astaroth\VkUtils\Contracts;
  */
 interface IFileUploader
 {
-    public function upload(IDocsUpload|IPhoto|IVideo ...$CompatibilityInstances): array;
+    /**
+     * @param ICanBeSaved ...$CompatibilityInstances
+     * @return array
+     * @throws \Exception
+     */
+    public function upload(...$CompatibilityInstances): array;
 }

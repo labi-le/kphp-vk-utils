@@ -1,6 +1,6 @@
 {
   "name": "labile/vk-utils",
-  "description": "PHP Utils for vk.com API",
+  "description": "PHP/KPHP Utils for vk.com API",
   "keywords": [
     "php",
     "vk-utils",
@@ -20,21 +20,17 @@
     }
   ],
   "require": {
-    "php": ">=8.0",
-    "guzzlehttp/guzzle": "^7.3",
-    "ext-fileinfo": "*",
-    "spatie/fork": "^1.1"
+    "php": ">=7.4",
+    "ext-curl": "*",
+    "ext-json": "*"
   },
-  "require-dev": {
-    "vimeo/psalm": "^4.7",
-    "phpunit/phpunit": "^9.5"
-  },
+
   "autoload": {
     "psr-4": {
       "Astaroth\\VkUtils\\": "src"
-    },
-    "files": [
-      "src/functions.php"
-    ]
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5"
   }
 }

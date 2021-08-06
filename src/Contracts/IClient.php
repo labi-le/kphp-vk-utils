@@ -12,17 +12,10 @@ use Astaroth\VkUtils\Exceptions\VkException;
 interface IClient
 {
     /**
-     * @param IRequest $request
-     * @return array
-     * @throws VkException
-     */
-    public function send(IRequest $request): array;
-
-    /**
      * @param string $method
-     * @param array $parameters
+     * @param mixed[] $parameters
      * @param string|null $token
-     * @return array
+     * @return mixed[]
      * @throws VkException
      */
     public function request(string $method, array $parameters = [], ?string $token = null): array;

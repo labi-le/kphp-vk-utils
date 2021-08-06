@@ -3,66 +3,47 @@
 declare(strict_types=1);
 
 
-use Astaroth\VkUtils\Uploading\MessagesUploader;
-use Astaroth\VkUtils\Uploading\Objects\AudioMessage;
-use Astaroth\VkUtils\Uploading\Objects\Doc;
-use Astaroth\VkUtils\Uploading\Objects\Graffiti;
-use Astaroth\VkUtils\Uploading\Objects\Photo;
-use Astaroth\VkUtils\Uploading\Objects\PhotoStories;
-use Astaroth\VkUtils\Uploading\Objects\Video;
-use Astaroth\VkUtils\Uploading\Objects\VideoStories;
-use Astaroth\VkUtils\Uploading\WallUploader;
-use PHPUnit\Framework\TestCase;
+use Astaroth\VkUtils\Builders\Attachments\Message\Doc;
+use Astaroth\VkUtils\Builders\Attachments\Message\PhotoMessages;
+use Astaroth\VkUtils\Builders\Attachments\Photo;
+use Astaroth\VkUtils\Builders\Attachments\ShortVideo;
+use Astaroth\VkUtils\Builders\Attachments\StoriesPhoto;
+use Astaroth\VkUtils\Builders\Attachments\StoriesVideo;
+use Astaroth\VkUtils\Builders\Attachments\Video;
+use Astaroth\VkUtils\Builders\Attachments\Wall\PhotoWall;
+use Astaroth\VkUtils\Uploader;
 use function PHPUnit\Framework\assertIsString;
+
+use PHPUnit\Framework\TestCase;
 
 class UploaderTest extends TestCase
 {
     private const ACCESS_TOKEN = "";
+    private const ALBUM_ID = 280398652; //set
 
-    private MessagesUploader $messageUploader;
-    private WallUploader $wallUploader;
+    private Uploader $uploader;
 
     protected function setUp(): void
     {
-        $this->wallUploader = new WallUploader();
-        $this->messageUploader = new MessagesUploader();
-
-        $this->wallUploader->setDefaultToken(self::ACCESS_TOKEN);
-        $this->messageUploader->setDefaultToken(self::ACCESS_TOKEN);
-
-        $this->wallUploader->setNumberOfParallelRequests(3);
-        $this->messageUploader->setNumberOfParallelRequests(3);
+        $this->uploader = new Uploader();
+        $this->uploader->setDefaultToken(self::ACCESS_TOKEN);
     }
 
-    public function testWallUploader(): void
+    public function testUpload(): void
     {
-        $attachments = $this->wallUploader->upload(
-            new Doc('https://images.dog.ceo/breeds/newfoundland/n02111277_11806.jpg'),
-            new Photo('https://images.dog.ceo/breeds/dane-great/n02109047_31049.jpg'),
-
-            (new Video('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4'))
-                ->setName('Test Video')
-                ->setIsPrivate(true)
-
-        );
-
-        array_walk($attachments, static fn($element) => assertIsString($element));
-    }
-
-    public function testMessageUploader(): void
-    {
-        $attachments = $this->messageUploader->upload(
-            new Doc('https://images.dog.ceo/breeds/newfoundland/n02111277_11806.jpg'),
-            new AudioMessage('https://psv4.userapi.com/c505636//u259166248/audiomsg/d47/6a42fe5ebc.mp3'),
-            new Graffiti('https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png'),
-            new Photo('https://images.dog.ceo/breeds/dane-great/n02109047_31049.jpg'),
-
-            (new VideoStories('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4'))->setAddToNews(false),
-            (new PhotoStories('https://purr.objects-us-east-1.dream.io/i/img-20171124-wa0007.jpg'))->setAddToNews(false),
-
-            (new Video('https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4'))
-                ->setName('Test Video')
-                ->setIsPrivate(true)
+        $attachments = $this->uploader->upload(
+            (new ShortVideo("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4"))
+                ->setDescription("#oldad"),
+            new Doc("https://images.dog.ceo/breeds/newfoundland/n02111277_11806.jpg"),
+            (new Photo("https://images.dog.ceo/breeds/dane-great/n02109047_31049.jpg"))
+                ->setAlbumId(self::ALBUM_ID),
+            new PhotoWall("https://images.dog.ceo/breeds/dane-great/n02109047_31049.jpg"),
+            new PhotoMessages("https://images.dog.ceo/breeds/dane-great/n02109047_31049.jpg"),
+            (new Video("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4"))
+                ->setName("Test Video")
+                ->setIsPrivate(true),
+            new StoriesVideo("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4"),
+            new StoriesPhoto("https://images.dog.ceo/breeds/dane-great/n02109047_31049.jpg")
 
         );
 

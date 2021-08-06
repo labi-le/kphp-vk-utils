@@ -29,7 +29,7 @@ class Request implements IRequest, IScriptable
      * Request constructor.
      *
      * @param string $method
-     * @param array $parameters
+     * @param mixed[] $parameters
      * @param ?string $token
      */
     public function __construct(string $method, array $parameters, ?string $token = null)
