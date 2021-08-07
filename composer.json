@@ -1,6 +1,8 @@
 {
   "name": "labile/vk-utils",
   "description": "PHP/KPHP Utils for vk.com API",
+  "version": "2",
+  "minimum-stability": "stable",
   "keywords": [
     "php",
     "vk-utils",
