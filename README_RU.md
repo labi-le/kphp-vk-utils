@@ -6,7 +6,7 @@
 
 ## Installation
 
-`composer require labile/vk-utils`
+`пока никак`
 
 ## Как это использовать?
 
@@ -114,11 +114,11 @@ $token = 'PUT TOKEN';
 $builder = new \Astaroth\VkUtils\Builder();
 
 $builders[] = (new Message)
-    ->setMessage("привет меня зовут лола!")
+    ->setMessage("hi me name is lola! im lol")
     ->setPeerId(418618);
 
 $builders[] = (new Post)
-    ->setMessage("привет папищики")
+    ->setMessage("hello subscribers")
 
 $response = $builder->create(...$builders)
 );
