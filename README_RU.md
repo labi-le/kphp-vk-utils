@@ -6,7 +6,7 @@
 
 ## Installation
 
-`пока никак`
+`composer require labile/vk-utils`
 
 ## Как это использовать?
 
