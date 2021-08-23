@@ -4,7 +4,7 @@
 [![Packagist Stars](https://img.shields.io/packagist/stars/labile/vk-utils)](https://packagist.org/packages/labile/vk-utils/stats)
 [![Packagist Stats](https://img.shields.io/packagist/dt/labile/vk-utils)](https://packagist.org/packages/labile/vk-utils/stats)
 
-[Документация на русском языке](https://github.com/labi-le/vk-utils/blob/main/README_RU.md)
+[Документация на русском языке](README_RU.md)
 
 ## Installation
 
