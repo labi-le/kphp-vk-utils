@@ -8,7 +8,7 @@
 
 ## Installation
 
-`not now`
+`composer require labile/vk-utils`
 
 ## How to use it?
 
