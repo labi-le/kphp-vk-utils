@@ -21,8 +21,6 @@ use Astaroth\VkUtils\Contracts\IFileUploader;
 
 class Uploader extends AbstractFork implements IFileUploader
 {
-    private const RuntimeException = 20;
-
     /**
      * KPHP Trick
      * @param string $version
@@ -163,7 +161,6 @@ class Uploader extends AbstractFork implements IFileUploader
         $concrete_file = (array)$data[$file_type];
 
         $this->validateAttachment($concrete_file, "owner_id", "id");
-
 
         $attachment = sprintf(
             "%s%s_%s",

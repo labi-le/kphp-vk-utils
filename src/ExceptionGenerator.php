@@ -23,6 +23,7 @@ class ExceptionGenerator
      * @throws Exceptions\InternalErrorVkException
      * @throws Exceptions\AccessDeniedVkException
      * @throws Exceptions\TooManyRequestsVkException
+     * @throws Exceptions\MissingOrInvalidExceptionParameters
      */
     public function throw(): void
     {
@@ -45,8 +46,10 @@ class ExceptionGenerator
                 throw new Exceptions\CaptchaRequiredVkException($this->message);
             case 15:
                 throw new Exceptions\AccessDeniedVkException($this->message);
-            case 20:
+            case Client::RuntimeException:
                 throw new Exceptions\RuntimeException($this->message);
+            case 100:
+                throw new Exceptions\MissingOrInvalidExceptionParameters($this->message);
         }
     }
 

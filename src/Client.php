@@ -16,6 +16,8 @@ use Throwable;
  */
 class Client implements IClient
 {
+    public const RuntimeException = 289;
+
     private const API = "https://api.vk.com/method/";
     private string $access_token;
     private string $version;
