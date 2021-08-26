@@ -50,6 +50,9 @@ class ExceptionGenerator
                 throw new Exceptions\RuntimeException($this->message);
             case 100:
                 throw new Exceptions\MissingOrInvalidExceptionParameters($this->message);
+
+            default:
+                throw new Exceptions\VkException($this->message);
         }
     }
 
