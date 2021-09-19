@@ -8,7 +8,7 @@
 
 ## Installation
 
-`composer require labile/vk-utils`
+`composer require labile/kphp-vk-utils`
 
 ## How to use it?
 
