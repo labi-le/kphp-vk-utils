@@ -87,7 +87,7 @@ class Uploader extends AbstractFork implements IFileUploader
 
             case StoriesPhoto::class:
             case StoriesVideo::class:
-                return $this->fetchStory($data);
+                return $this->fetchStory($data["items"]);
 
             case Video::class:
             case ShortVideo::class:
