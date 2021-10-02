@@ -1,8 +1,8 @@
 # vk-utils
 
-[![GitHub license](https://img.shields.io/badge/license-BSD-green.svg)](https://github.com/labi-le/kphp-utils/blob/main/LICENSE)
-[![Packagist Stars](https://img.shields.io/packagist/stars/labile/kphp-vk-utils)](https://packagist.org/packages/labile/kphp-utils/stats)
-[![Packagist Stats](https://img.shields.io/packagist/dt/labile/kphp-vk-utils)](https://packagist.org/packages/labile/kphp-utils/stats)
+[![GitHub license](https://img.shields.io/badge/license-BSD-green.svg)](https://github.com/labi-le/kphp-vk-utils/blob/main/LICENSE)
+[![Packagist Stars](https://img.shields.io/packagist/stars/labile/kphp-vk-utils)](https://packagist.org/packages/labile/kphp-vk-utils/stats)
+[![Packagist Stats](https://img.shields.io/packagist/dt/labile/kphp-vk-utils)](https://packagist.org/packages/labile/kphp-vk-utils/stats)
 
 [Документация на русском языке](README_RU.md)
 
